@@ -9,6 +9,7 @@ import com.sky.context.BaseContext;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.dto.EmployeePageQueryDTO;
+import com.sky.dto.PasswordEditDTO;
 import com.sky.entity.Employee;
 import com.sky.exception.AccountLockedException;
 import com.sky.exception.AccountNotFoundException;
@@ -90,6 +91,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         //设置当前记录的创建人id和修改人id
         employee.setCreateUser(BaseContext.getCurrentId());
         employee.setUpdateUser(BaseContext.getCurrentId());
+        
+        // 初始化令牌版本号
+        employee.setTokenVersion(0);
 
         employeeMapper.insert(employee);
     }
@@ -148,4 +152,24 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeMapper.update(employee);
     }
 
+    /**
+     * 修改密码
+     *
+     * @param passwordEditDTO
+     */
+    @Override
+    public void editPassword(PasswordEditDTO passwordEditDTO) {
+        //判断旧密码是否正确
+        Employee employee = employeeMapper.getById(BaseContext.getCurrentId());
+        if (!employee.getPassword().equals(DigestUtils.md5DigestAsHex(passwordEditDTO.getOldPassword().getBytes()))) {
+            //密码错误
+            throw new PasswordErrorException(MessageConstant.PASSWORD_ERROR);
+        } else {
+            //密码正确，修改密码
+            employee.setPassword(DigestUtils.md5DigestAsHex(passwordEditDTO.getNewPassword().getBytes()));
+            // 递增令牌版本号，使旧的JWT令牌失效
+            employee.setTokenVersion(employee.getTokenVersion() + 1);
+            employeeMapper.update(employee);
+        }
+    }
 }

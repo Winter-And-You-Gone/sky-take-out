@@ -42,5 +42,7 @@ public class Employee implements Serializable {
     private Long createUser;
 
     private Long updateUser;
-
+    
+    // JWT令牌版本号，用于使旧令牌失效
+    private Integer tokenVersion = 0;
 }
