@@ -45,6 +45,7 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
 
     /**
      * 通过knife4j生成接口文档
+     *
      * @return
      */
     @Bean
@@ -65,6 +66,7 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
 
     /**
      * 设置静态资源映射
+     *
      * @param registry
      */
     protected void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -74,6 +76,7 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
 
     /**
      * 扩展消息转换器，实现日期类型的格式化
+     *
      * @param converters
      */
     protected void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
@@ -84,6 +87,5 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
         messageConverter.setObjectMapper(new JacksonObjectMapper()); // 设置日期格式，防止序列化日期出错
         //将自己的消息转换器加入到converters容器中
         converters.add(0, messageConverter);
-
     }
 }
