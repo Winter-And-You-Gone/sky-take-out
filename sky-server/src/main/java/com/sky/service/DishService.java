@@ -27,7 +27,7 @@ public interface DishService {
      * @param id
      * @return
      */
-    DishVO getById(Long id);
+    DishVO getByIdWithFlavor(Long id);
 
     /**
      * 根据分类id查询菜品列表
@@ -35,4 +35,23 @@ public interface DishService {
      * @return
      */
     List<Dish> list(Long categoryId);
+
+    /**
+     * 启售禁售菜品
+     * @param status
+     * @return
+     */
+    void startOrStop(Integer status, Long id);
+
+    /**
+     * 修改菜品
+     * @param dishDTO
+     */
+    void updateWithFlavor(DishDTO dishDTO);
+
+    /**
+     * 根据id批量删除菜品
+     * @param ids
+     */
+    void deleteBatchById(List<Long> ids);
 }

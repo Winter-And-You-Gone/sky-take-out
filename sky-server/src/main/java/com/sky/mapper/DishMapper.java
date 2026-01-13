@@ -38,7 +38,7 @@ public interface DishMapper {
      * @param dishPageQueryDTO
      * @return
      */
-    Page<Dish> pageQuery(DishPageQueryDTO dishPageQueryDTO);
+    Page<DishVO> pageQuery(DishPageQueryDTO dishPageQueryDTO);
 
     /**
      * 根据id查询菜品和对应的口味
@@ -55,4 +55,19 @@ public interface DishMapper {
      * @return
      */
     List<Dish> list(Long categoryId);
+
+    /**
+     * 修改菜品
+     *
+     * @param dish
+     */
+    @AutoFill(value = OperationType.UPDATE)
+    void update(Dish dish);
+
+    /**
+     * 根据id批量删除菜品
+     *
+     * @param ids
+     */
+    void deleteBatchById(List<Long> ids);
 }
