@@ -31,10 +31,10 @@ public interface DishService {
 
     /**
      * 根据分类id查询菜品列表
-     * @param categoryId
+     * @param dish
      * @return
      */
-    List<Dish> list(Long categoryId);
+    List<Dish> list(Dish dish);
 
     /**
      * 启售禁售菜品
@@ -54,4 +54,11 @@ public interface DishService {
      * @param ids
      */
     void deleteBatchById(List<Long> ids);
+
+        /**
+     * 条件查询菜品和口味
+     * @param dish
+     * @return
+     */
+    List<DishVO> listWithFlavor(Dish dish);
 }
