@@ -9,6 +9,8 @@ import com.sky.service.DishService;
 import com.sky.vo.DishVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -62,6 +64,7 @@ public class DishController {
      * @return
      */
     @GetMapping("/list")
+    @Cacheable(cacheNames = "dishCache", key = "#dish.categoryId")
     public Result<List<Dish>> list(Dish dish) {
         log.info("根据分类id查询菜品：{}", dish);
         List<Dish> list = dishService.list(dish);
@@ -75,6 +78,7 @@ public class DishController {
      * @return
      */
     @PostMapping("/status/{status}")
+    @CacheEvict(cacheNames = "dishCache", allEntries = true)
     public Result<Object> startOrStop(@PathVariable Integer status, Long id) {
         log.info("启售禁售菜品：status({}) id({})", status, id);
         dishService.startOrStop(status, id);
@@ -87,6 +91,7 @@ public class DishController {
      * @return
      */
     @PutMapping
+    @CacheEvict(cacheNames = "dishCache", allEntries = true)
     public Result<Object> update(@RequestBody DishDTO dishDTO) {
         log.info("修改菜品信息：{}", dishDTO);
         dishService.updateWithFlavor(dishDTO);
@@ -99,6 +104,7 @@ public class DishController {
      * @return
      */
     @DeleteMapping
+    @CacheEvict(cacheNames = "dishCache", allEntries = true)
     public Result<Object> delete(@RequestParam List<Long> ids) {
         log.info("批量删除菜品：{}", ids);
         dishService.deleteBatchById(ids);

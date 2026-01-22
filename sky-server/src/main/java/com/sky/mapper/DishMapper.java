@@ -28,6 +28,7 @@ public interface DishMapper {
      * 插入菜品数据
      *
      * @param dish
+     * @return
      */
     @AutoFill(value = OperationType.INSERT)
     void insert(Dish dish);
@@ -60,6 +61,7 @@ public interface DishMapper {
      * 修改菜品
      *
      * @param dish
+     * @return
      */
     @AutoFill(value = OperationType.UPDATE)
     void update(Dish dish);
@@ -68,6 +70,15 @@ public interface DishMapper {
      * 根据id批量删除菜品
      *
      * @param ids
+     * @return
      */
     void deleteBatchById(List<Long> ids);
+
+    /**
+     * 根据id查询菜品信息
+     *
+     * @param dishId
+     * @return
+     */
+    Dish getById(Long dishId);
 }

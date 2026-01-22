@@ -76,4 +76,11 @@ public interface SetmealMapper {
      * @return
      */
     void deleteBatchById(List<Long> ids);
+
+    /**
+     * 根据id查询套餐
+     * @param setmealId
+     * @return
+     */
+    Setmeal getById(Long setmealId);
 }

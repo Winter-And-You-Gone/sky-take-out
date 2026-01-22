@@ -103,24 +103,28 @@
     </resultMap>
 
     <select id="getByIdWithDish" resultMap="setmealWithDishRM">
-        select s.id as setmeal_id,
-               s.name as setmeal_name,
+        select s.id          as setmeal_id,
+               s.name        as setmeal_name,
                s.category_id,
                s.price,
                s.status,
                s.description,
                s.image,
                s.update_time,
-               c.name as category_name,
-               sd.id as sd_id,
+               c.name        as category_name,
+               sd.id         as sd_id,
                sd.setmeal_id as sd_setmeal_id,
                sd.dish_id,
-               sd.name as sd_name,
-               sd.price as sd_price,
+               sd.name       as sd_name,
+               sd.price      as sd_price,
                sd.copies
         from setmeal s
-        left join category c on s.category_id = c.id
-        left join setmeal_dish sd on s.id = sd.setmeal_id
+                 left join category c on s.category_id = c.id
+                 left join setmeal_dish sd on s.id = sd.setmeal_id
         where s.id = #{id}
+    </select>
+    <!--根据id查询套餐-->
+    <select id="getById" resultType="com.sky.entity.Setmeal">
+        select * from setmeal where id = #{id}
     </select>
 </mapper>
