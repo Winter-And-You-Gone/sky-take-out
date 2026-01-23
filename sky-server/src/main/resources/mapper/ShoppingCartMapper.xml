@@ -13,6 +13,11 @@
         set number = #{number}
         where id = #{id}
     </update>
+    <!--根据用户id清空购物车-->
+    <delete id="deleteByUserId">
+        delete from shopping_cart
+        where user_id = #{userId}
+    </delete>
     <!--动态条件查询-->
     <select id="list" resultType="com.sky.entity.ShoppingCart">
         select * from shopping_cart

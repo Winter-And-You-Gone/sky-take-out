@@ -68,10 +68,37 @@ public class shoppingCartServiceImpl implements ShoppingCartService {
                 shoppingCart.setImage(setmeal.getImage());
                 shoppingCart.setAmount(setmeal.getPrice());
             }
-            // 插入数据
+            // 设置数量为1
             shoppingCart.setNumber(1);
+            // 设置创建时间为当前时间
             shoppingCart.setCreateTime(LocalDateTime.now());
+            // 插入数据
             shoppingCartMapper.insert(shoppingCart);
         }
+    }
+
+    /**
+     * 查看购物车
+     *
+     * @return
+     */
+    @Override
+    public List<ShoppingCart> showShoppingCart() {
+        // 获取当前用户的id
+        Long userId = BaseContext.getCurrentId();
+        ShoppingCart shoppingCart = ShoppingCart.builder().userId(userId).build();
+        return shoppingCartMapper.list(shoppingCart);
+    }
+
+    /**
+     * 清空购物车
+     *
+     * @return
+     */
+    @Override
+    public void cleanShoppingCart() {
+        // 获取当前用户的id
+        Long userId = BaseContext.getCurrentId();
+        shoppingCartMapper.deleteByUserId(userId);
     }
 }
