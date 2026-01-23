@@ -34,4 +34,11 @@ public interface ShoppingCartMapper {
      * @return
      */
     void deleteByUserId(Long userId);
+
+    /**
+     * 删除购物车中一个商品
+     * @param shoppingCart
+     * @return
+     */
+    void deleteOne(ShoppingCart shoppingCart);
 }
