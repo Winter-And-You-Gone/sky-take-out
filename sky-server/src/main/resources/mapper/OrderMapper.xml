@@ -42,4 +42,149 @@
         </set>
         where id = #{id}
     </update>
+    <!--用于返回OrderVO的resultMap，包含订单详情列表-->
+    <resultMap id="orderWithDetailsMap" type="com.sky.vo.OrderVO">
+        <id property="id" column="id"/>
+        <result property="number" column="number"/>
+        <result property="status" column="status"/>
+        <result property="userId" column="user_id"/>
+        <result property="addressBookId" column="address_book_id"/>
+        <result property="orderTime" column="order_time"/>
+        <result property="checkoutTime" column="checkout_time"/>
+        <result property="payMethod" column="pay_method"/>
+        <result property="payStatus" column="pay_status"/>
+        <result property="amount" column="amount"/>
+        <result property="remark" column="remark"/>
+        <result property="userName" column="user_name"/>
+        <result property="phone" column="phone"/>
+        <result property="address" column="address"/>
+        <result property="consignee" column="consignee"/>
+        <result property="cancelReason" column="cancel_reason"/>
+        <result property="rejectionReason" column="rejection_reason"/>
+        <result property="cancelTime" column="cancel_time"/>
+        <result property="estimatedDeliveryTime" column="estimated_delivery_time"/>
+        <result property="deliveryStatus" column="delivery_status"/>
+        <result property="deliveryTime" column="delivery_time"/>
+        <result property="packAmount" column="pack_amount"/>
+        <result property="tablewareNumber" column="tableware_number"/>
+        <result property="tablewareStatus" column="tableware_status"/>
+        <collection property="orderDetailList" ofType="com.sky.entity.OrderDetail">
+            <id property="id" column="order_detail_id"/>
+            <result property="name" column="order_detail_name"/>
+            <result property="orderId" column="order_detail_order_id"/>
+            <result property="dishId" column="dish_id"/>
+            <result property="setmealId" column="setmeal_id"/>
+            <result property="dishFlavor" column="dish_flavor"/>
+            <result property="number" column="order_detail_number"/>
+            <result property="amount" column="order_detail_amount"/>
+            <result property="image" column="order_detail_image"/>
+        </collection>
+    </resultMap>
+
+    <!--订单分页查询-->
+    <select id="pageQuery" resultType="com.sky.entity.Orders">
+        select *
+        from orders
+        <where>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+            <if test="number != null and number != ''">
+                and number = #{number}
+            </if>
+            <if test="phone != null and phone != ''">
+                and phone = #{phone}
+            </if>
+            <if test="beginTime != null">
+                and order_time &gt;= #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and order_time &lt;= #{endTime}
+            </if>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+        </where>
+        order by order_time desc
+    </select>
+
+    <!--订单分页查询，带订单详情-->
+    <select id="pageQueryWithOrderDetail" resultMap="orderWithDetailsMap">
+        select o.id, o.number, o.status, o.user_id, o.address_book_id, o.order_time, o.checkout_time,
+        o.pay_method, o.pay_status, o.amount, o.remark, o.user_name, o.phone, o.address, o.consignee,
+        o.cancel_reason, o.rejection_reason, o.cancel_time, o.estimated_delivery_time, o.delivery_status,
+        o.delivery_time, o.pack_amount, o.tableware_number, o.tableware_status,
+        od.id as order_detail_id, od.name as order_detail_name, od.order_id as order_detail_order_id,
+        od.dish_id, od.setmeal_id, od.dish_flavor, od.number as order_detail_number, od.amount as order_detail_amount,
+        od.image as order_detail_image
+        from orders o
+        left join order_detail od on o.id = od.order_id
+        <where>
+            <if test="status != null">
+                and o.status = #{status}
+            </if>
+            <if test="number != null and number != ''">
+                and o.number = #{number}
+            </if>
+            <if test="phone != null and phone != ''">
+                and o.phone = #{phone}
+            </if>
+            <if test="beginTime != null">
+                and o.order_time &gt;= #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and o.order_time &lt;= #{endTime}
+            </if>
+            <if test="userId != null">
+                and o.user_id = #{userId}
+            </if>
+        </where>
+        order by o.order_time desc, od.id
+    </select>
+    <!--根据id查询订单信息-->
+    <select id="getById" resultMap="orderWithDetailsMap">
+        select o.id,
+               o.number,
+               o.status,
+               o.user_id,
+               o.address_book_id,
+               o.order_time,
+               o.checkout_time,
+               o.pay_method,
+               o.pay_status,
+               o.amount,
+               o.remark,
+               o.user_name,
+               o.phone,
+               o.address,
+               o.consignee,
+               o.cancel_reason,
+               o.rejection_reason,
+               o.cancel_time,
+               o.estimated_delivery_time,
+               o.delivery_status,
+               o.delivery_time,
+               o.pack_amount,
+               o.tableware_number,
+               o.tableware_status,
+               od.id       as order_detail_id,
+               od.name     as order_detail_name,
+               od.order_id as order_detail_order_id,
+               od.dish_id,
+               od.setmeal_id,
+               od.dish_flavor,
+               od.number   as order_detail_number,
+               od.amount   as order_detail_amount,
+               od.image    as order_detail_image
+        from orders o
+                 left join order_detail od on o.id = od.order_id
+        where o.id = #{id}
+    </select>
+    <!--各个状态的订单数量统计-->
+    <select id="statistics" resultType="com.sky.vo.OrderStatisticsVO">
+        SELECT SUM(IF(status = 2, 1, 0)) AS toBeConfirmed,
+               SUM(IF(status = 3, 1, 0)) AS confirmed,
+               SUM(IF(status = 4, 1, 0)) AS deliveryInProgress
+        FROM orders
+    </select>
 </mapper>
