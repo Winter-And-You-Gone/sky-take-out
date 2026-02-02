@@ -24,6 +24,11 @@ public class ShopController {
     public Result<Integer> getStatus() {
         log.info("获取营业状态");
         Integer status = (Integer) redisTemplate.opsForValue().get(KEY);
+        // 修复空指针异常：添加null检查
+        if (status == null) {
+            log.info("Redis中未找到营业状态，返回默认状态：打烊中");
+            status = 0; // 默认为打烊状态
+        }
         log.info("获取到营业状态为：{}", status == 1 ? "营业中" : "打烊中");
         return Result.success(status);
     }
