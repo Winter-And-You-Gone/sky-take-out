@@ -8,6 +8,9 @@ import com.sky.vo.OrderVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Mapper
 public interface OrderMapper {
     /**
@@ -48,4 +51,12 @@ public interface OrderMapper {
      * @return 订单数量统计结果
      */
     OrderStatisticsVO statistics();
+
+    /**
+     * 根据订单状态和下单时间查询超时订单
+     * @param status
+     * @param orderTime
+     * @return
+     */
+    List<Orders> getTimeoutOrderByStatusAndOrderTimeLT(Integer status, LocalDateTime orderTime);
 }

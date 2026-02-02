@@ -187,4 +187,11 @@
                SUM(IF(status = 4, 1, 0)) AS deliveryInProgress
         FROM orders
     </select>
+    <!--根据订单状态和下单时间查询超时订单-->
+    <select id="getTimeoutOrderByStatusAndOrderTimeLT" resultType="com.sky.entity.Orders">
+        select *
+        from orders
+        where status = #{status}
+          and order_time &lt; #{orderTime}
+    </select>
 </mapper>
