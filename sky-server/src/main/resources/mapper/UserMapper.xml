@@ -6,4 +6,17 @@
         insert into user (openid, create_time, name, phone, sex, id_number, avatar)
         values (#{openid}, #{createTime}, #{name}, #{phone}, #{sex}, #{idNumber}, #{avatar})
     </insert>
+    <!--根据动态条件统计用户数量-->
+    <select id="countByMap" resultType="java.lang.Integer">
+        select count(id)
+        from user
+        <where>
+            <if test="begin != null">
+                and create_time &gt;= #{begin}
+            </if>
+            <if test="end != null">
+                and create_time &lt;= #{end}
+            </if>
+        </where>
+    </select>
 </mapper>
