@@ -33,7 +33,7 @@ public class RedisConfiguration {
             try {
                 log.info("项目启动，开始清空Redis缓存数据...");
                 // 只清空以特定前缀开头的缓存key，保留业务数据如SHOP_STATUS
-                String[] cachePatterns = {"dish_*", "setmeal_*", "category_*"};
+                String[] cachePatterns = {"dish*", "setmeal*", "category*"};
                 
                 for (String pattern : cachePatterns) {
                     redisTemplate.delete(redisTemplate.keys(pattern));
